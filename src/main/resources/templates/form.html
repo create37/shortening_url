@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+    <script>
+        $(window).on('load', function () {
+
+            $(function () {
+                'use strict';
+                ShorteningUrlView.init();
+            });
+
+            var ShorteningUrlView = (function () {
+
+                var settings = {
+                    $convertBtn : $('#convertBtn'),
+                    $inputValue : $('#inputValue'),
+                    $resultLayer : $('#resultLayer'),
+                    $shorteningUrl : $('#shorteningUrl')
+                };
+
+                var init = function () {
+                    binding();
+                };
+
+                var binding = function () {
+                    settings.$convertBtn.on('click', function (e) {
+                        e.preventDefault();
+                        $.ajax({
+                            url: '/convert',
+                            type: 'GET',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: {
+                                originUrl: settings.$inputValue.val()
+
+                            },
+                            success: function (res) {
+                                if(res.converted) {
+                                    window.open('/redirect?location=' + res.originUrl,'_self');
+                                } else {
+                                    settings.$resultLayer.show();
+                                    settings.$shorteningUrl.text(res.shorteningUrl);
+                                }
+                            },
+                            error: function () {
+                                alert('URL 변환에 실패 하였습니다.');
+                            }
+                        });
+                    });
+                };
+
+                return {
+                    init : init
+                };
+            })();
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <h1>Shortening Url</h1>
+        <table>
+            <tr>
+                <th>입력</th>
+                <td>
+                    <input id="inputValue" type="text" />
+                    <button id="convertBtn" type="button">변경</button>
+                </td>
+            </tr>
+            <tr id="resultLayer" style="display:none;">
+                <th>결과</th>
+                <td>
+                    <span id="shorteningUrl"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
