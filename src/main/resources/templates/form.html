@@ -36,12 +36,22 @@
 
                             },
                             success: function (res) {
-                                if(res.converted) {
-                                    window.open('/redirect?location=' + res.originUrl,'_self');
+                                if(res.status == 'OK') {
+                                    var resData = res.data;
+                                    if(resData.converted) {
+                                        window.open('/redirect?location=' + resData.originUrl,'_self');
+                                    } else {
+                                        settings.$resultLayer.show();
+                                        settings.$shorteningUrl.text(resData.shorteningUrl);
+                                    }
                                 } else {
-                                    settings.$resultLayer.show();
-                                    settings.$shorteningUrl.text(res.shorteningUrl);
+                                    if(res.message != undefined) {
+                                        alert(res.message);
+                                    } else {
+                                        alert('URL 변환에 실패 하였습니다.');
+                                    }
                                 }
+
                             },
                             error: function () {
                                 alert('URL 변환에 실패 하였습니다.');

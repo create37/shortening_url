@@ -52,7 +52,12 @@ public class ShorteningUrlUtils {
         Long key = 0L;
         int pow = shorteningUrl.length();
         for(int i=0; i<shorteningUrlArr.length; i++) {
-            key += (long) Math.pow(DIGITS, --pow) * BASE62_DECODE_MAP.get(shorteningUrlArr[i]);
+            Integer decodeValue = BASE62_DECODE_MAP.get(shorteningUrlArr[i]);
+            if(decodeValue == null) {
+                throw new IllegalStateException(
+                        "Contains characters that can not be converted. ShorteningUrl : " + shorteningUrl);
+            }
+            key += (long) Math.pow(DIGITS, --pow) * decodeValue;
         }
         return key;
     }

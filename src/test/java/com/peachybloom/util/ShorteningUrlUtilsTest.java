@@ -44,4 +44,10 @@ public class ShorteningUrlUtilsTest {
 
         assertThat(shorteningUrl).isEqualTo("ZZZZZZZZ");
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void containsNotDecodeCharFailedTest() {
+        String shorteningUrl = "{123}";
+        Long key = ShorteningUrlUtils.makeShorteningUrlKey(shorteningUrl);
+    }
 }
