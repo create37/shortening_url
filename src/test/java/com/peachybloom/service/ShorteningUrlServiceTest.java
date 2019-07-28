@@ -1,7 +1,7 @@
 package com.peachybloom.service;
 
+import com.peachybloom.component.ShorteningUrlMaker;
 import com.peachybloom.domain.model.UrlConvertModel;
-import com.peachybloom.util.ShorteningUrlUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,9 @@ public class ShorteningUrlServiceTest {
 
     @Autowired
     private ShorteningUrlService shorteningUrlService;
+
+    @Autowired
+    private ShorteningUrlMaker shorteningUrlMaker;
 
     @Test
     public void convertTest() {
@@ -40,7 +43,7 @@ public class ShorteningUrlServiceTest {
 
     @Test(expected = IllegalStateException.class)
     public void convertFailedTest() {
-        String originUrl = ShorteningUrlUtils.getPrefixUrls()[0]+ "zzzz";
+        String originUrl = shorteningUrlMaker.getPrefixUrls()[0]+ "zzzz";
         UrlConvertModel urlConvertModel = shorteningUrlService.convert(originUrl);
 
         assertThat(urlConvertModel.getOriginUrl()).isEqualTo(originUrl);

@@ -1,7 +1,9 @@
 package com.peachybloom.util;
 
+import com.peachybloom.component.ShorteningUrlMaker;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -13,26 +15,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class ShorteningUrlUtilsTest {
 
+    @Autowired
+    private ShorteningUrlMaker shorteningUrlMaker;
+
     @Test
     public void makeShorteningUrlTest() {
         Long key = 218340105584895L;
-        String shorteningUrl = ShorteningUrlUtils.makeShorteningUrl(key);
+        String shorteningUrl = shorteningUrlMaker.makeShorteningUrl(key);
 
-        assertThat(shorteningUrl).isEqualTo(ShorteningUrlUtils.getPrefixUrls()[0] + "ZZZZZZZZ");
+        assertThat(shorteningUrl).isEqualTo(shorteningUrlMaker.getPrefixUrls()[0] + "ZZZZZZZZ");
     }
 
     @Test(expected = IllegalStateException.class)
     public void makeShorteningUrlFailedTest() {
         Long key = 218340105584896L;
-        String shorteningUrl = ShorteningUrlUtils.makeShorteningUrl(key);
+        String shorteningUrl = shorteningUrlMaker.makeShorteningUrl(key);
 
-        assertThat(shorteningUrl).isEqualTo(ShorteningUrlUtils.getPrefixUrls()[0] + "100000000");
+        assertThat(shorteningUrl).isEqualTo(shorteningUrlMaker.getPrefixUrls()[0] + "100000000");
     }
 
     @Test
     public void makeShorteningUrlKeyTest() {
         String shorteningUrl = "ZZZZZZZZ";
-        Long key = ShorteningUrlUtils.makeShorteningUrlKey(shorteningUrl);
+        Long key = shorteningUrlMaker.makeShorteningUrlKey(shorteningUrl);
 
         assertThat(key).isEqualTo(218340105584895L);
     }
@@ -40,7 +45,7 @@ public class ShorteningUrlUtilsTest {
     @Test
     public void getShorteningUrlTest() {
         String shorteningFullUrl = "http://localhost:8080/ZZZZZZZZ";
-        String shorteningUrl = ShorteningUrlUtils.getShorteningUrl(shorteningFullUrl);
+        String shorteningUrl = shorteningUrlMaker.getShorteningUrl(shorteningFullUrl);
 
         assertThat(shorteningUrl).isEqualTo("ZZZZZZZZ");
     }
@@ -48,6 +53,6 @@ public class ShorteningUrlUtilsTest {
     @Test(expected = IllegalStateException.class)
     public void containsNotDecodeCharFailedTest() {
         String shorteningUrl = "{123}";
-        Long key = ShorteningUrlUtils.makeShorteningUrlKey(shorteningUrl);
+        Long key = shorteningUrlMaker.makeShorteningUrlKey(shorteningUrl);
     }
 }

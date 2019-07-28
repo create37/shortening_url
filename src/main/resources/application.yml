@@ -11,6 +11,13 @@ spring:
   jpa:
     show-sql: true
 
+shortening-url:
+  limit-key: 218340105584895
+  max-length: 8
+  digits-values: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+  prefix-urls:
+    - http://localhost:8080/
+
 ---
 spring:
   profiles: test

@@ -1,15 +1,18 @@
 package com.peachybloom.service;
 
+import com.peachybloom.component.ShorteningUrlMaker;
 import com.peachybloom.domain.entity.UrlMap;
 import com.peachybloom.domain.model.UrlConvertModel;
 import com.peachybloom.repository.UrlMapRepository;
-import com.peachybloom.util.ShorteningUrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
 public class ShorteningUrlService {
+
+    @Autowired
+    private ShorteningUrlMaker shorteningUrlMaker;
 
     @Autowired
     private UrlMapRepository urlMapRepository;
@@ -23,9 +26,9 @@ public class ShorteningUrlService {
     private UrlMap getUrlMap(String originUrl, UrlConvertModel urlConvertModel) {
         UrlMap urlMap = null;
 
-        String shorteningUrl = ShorteningUrlUtils.getShorteningUrl(originUrl);
+        String shorteningUrl = shorteningUrlMaker.getShorteningUrl(originUrl);
         if(!StringUtils.isEmpty(shorteningUrl)) {
-            Long urlKey = ShorteningUrlUtils.makeShorteningUrlKey(shorteningUrl);
+            Long urlKey = shorteningUrlMaker.makeShorteningUrlKey(shorteningUrl);
             urlMap = urlMapRepository.findById(urlKey)
                     .orElseThrow(() -> new IllegalStateException("Not found ShorteningUrl. url : " + originUrl));
             urlConvertModel.setConverted(true);
@@ -48,7 +51,7 @@ public class ShorteningUrlService {
     }
 
     private UrlConvertModel makeUrlModel(UrlMap urlMap, UrlConvertModel urlConvertModel) {
-        String shorteningUrl = ShorteningUrlUtils.makeShorteningUrl(urlMap.getId());
+        String shorteningUrl = shorteningUrlMaker.makeShorteningUrl(urlMap.getId());
 
         urlConvertModel.setOriginUrl(urlMap.getOriginUrl());
         urlConvertModel.setShorteningUrl(shorteningUrl);
