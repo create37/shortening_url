@@ -34,6 +34,6 @@
     2. IDE 에서 ShorteningUrlApplication.java > run or debug
     3. localhost:8080 으로 접속
 ### 3.4 운영환경
-    1. 빌드결과 나온 jar 파일을 배포할 경로로 이동
+    1. 빌드결과 나온 jar 또는 package/shortening_url-0.0.1-SNAPSHOT.jar 파일을 배포할 경로로 이동
     2. nohup {설치된 JAVA} -jar {배포된 shortening_url-0.0.1-SNAPSHOT.jar} &
     3. 배포된 운영환경의 8080 포트로 접속
