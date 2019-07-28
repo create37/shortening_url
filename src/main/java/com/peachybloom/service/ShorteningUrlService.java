@@ -6,6 +6,7 @@ import com.peachybloom.domain.model.UrlConvertModel;
 import com.peachybloom.repository.UrlMapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -17,6 +18,7 @@ public class ShorteningUrlService {
     @Autowired
     private UrlMapRepository urlMapRepository;
 
+    @Transactional
     public UrlConvertModel convert(String originUrl) {
         UrlConvertModel urlConvertModel = new UrlConvertModel();
         UrlMap urlMap = getUrlMap(originUrl, urlConvertModel);
